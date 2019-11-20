@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.shopping.entity.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="VARCHAR" property="uid" />
+    <result column="orderid" jdbcType="VARCHAR" property="orderid" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="finalprice" jdbcType="DECIMAL" property="finalprice" />
+    <result column="addressid" jdbcType="INTEGER" property="addressid" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="closetime" jdbcType="TIMESTAMP" property="closetime" />
+    <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="courier" jdbcType="VARCHAR" property="courier" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime" />
+    <result column="recievetime" jdbcType="TIMESTAMP" property="recievetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, uid, orderid, price, finalprice, addressid, cid, status, createtime, closetime, 
+    paytime, courier, company, sendtime, recievetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectOrders" parameterType="Orders" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from orders
+    <where>
+      <if test="orderid!=null">
+        orderid like "%"#{orderid}"%"
+      </if>
+      <if test="status!=null">
+        status = #{status}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.shopping.entity.Orders">
+    insert into orders (id, uid, orderid, 
+      price, finalprice, addressid, 
+      cid, status, createtime, 
+      closetime, paytime, courier, 
+      company, sendtime, recievetime
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{finalprice,jdbcType=DECIMAL}, #{addressid,jdbcType=INTEGER}, 
+      #{cid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{closetime,jdbcType=TIMESTAMP}, #{paytime,jdbcType=TIMESTAMP}, #{courier,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{sendtime,jdbcType=TIMESTAMP}, #{recievetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.shopping.entity.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="orderid != null">
+        orderid,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="finalprice != null">
+        finalprice,
+      </if>
+      <if test="addressid != null">
+        addressid,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="closetime != null">
+        closetime,
+      </if>
+      <if test="paytime != null">
+        paytime,
+      </if>
+      <if test="courier != null">
+        courier,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="sendtime != null">
+        sendtime,
+      </if>
+      <if test="recievetime != null">
+        recievetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null">
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="finalprice != null">
+        #{finalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressid != null">
+        #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closetime != null">
+        #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null">
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courier != null">
+        #{courier,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recievetime != null">
+        #{recievetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shopping.entity.Orders">
+    update orders
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null">
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="finalprice != null">
+        finalprice = #{finalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressid != null">
+        addressid = #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closetime != null">
+        closetime = #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null">
+        paytime = #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courier != null">
+        courier = #{courier,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recievetime != null">
+        recievetime = #{recievetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shopping.entity.Orders">
+    update orders
+    set uid = #{uid,jdbcType=VARCHAR},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      finalprice = #{finalprice,jdbcType=DECIMAL},
+      addressid = #{addressid,jdbcType=INTEGER},
+      cid = #{cid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      closetime = #{closetime,jdbcType=TIMESTAMP},
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+      courier = #{courier,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      recievetime = #{recievetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <resultMap id="BaseResultMap" type="com.shopping.entity.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="VARCHAR" property="uid" />
+    <result column="orderid" jdbcType="VARCHAR" property="orderid" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="finalprice" jdbcType="DECIMAL" property="finalprice" />
+    <result column="addressid" jdbcType="INTEGER" property="addressid" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="closetime" jdbcType="TIMESTAMP" property="closetime" />
+    <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
+    <result column="courier" jdbcType="VARCHAR" property="courier" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime" />
+    <result column="recievetime" jdbcType="TIMESTAMP" property="recievetime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, uid, orderid, price, finalprice, addressid, cid, status, createtime, closetime, 
+    paytime, courier, company, sendtime, recievetime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.shopping.entity.Orders">
+    insert into orders (id, uid, orderid, 
+      price, finalprice, addressid, 
+      cid, status, createtime, 
+      closetime, paytime, courier, 
+      company, sendtime, recievetime
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{finalprice,jdbcType=DECIMAL}, #{addressid,jdbcType=INTEGER}, 
+      #{cid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{closetime,jdbcType=TIMESTAMP}, #{paytime,jdbcType=TIMESTAMP}, #{courier,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{sendtime,jdbcType=TIMESTAMP}, #{recievetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.shopping.entity.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="orderid != null">
+        orderid,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="finalprice != null">
+        finalprice,
+      </if>
+      <if test="addressid != null">
+        addressid,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+      <if test="closetime != null">
+        closetime,
+      </if>
+      <if test="paytime != null">
+        paytime,
+      </if>
+      <if test="courier != null">
+        courier,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="sendtime != null">
+        sendtime,
+      </if>
+      <if test="recievetime != null">
+        recievetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null">
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="finalprice != null">
+        #{finalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressid != null">
+        #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closetime != null">
+        #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null">
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courier != null">
+        #{courier,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recievetime != null">
+        #{recievetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shopping.entity.Orders">
+    update orders
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderid != null">
+        orderid = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="finalprice != null">
+        finalprice = #{finalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressid != null">
+        addressid = #{addressid,jdbcType=INTEGER},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closetime != null">
+        closetime = #{closetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null">
+        paytime = #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courier != null">
+        courier = #{courier,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="sendtime != null">
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recievetime != null">
+        recievetime = #{recievetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shopping.entity.Orders">
+    update orders
+    set uid = #{uid,jdbcType=VARCHAR},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      finalprice = #{finalprice,jdbcType=DECIMAL},
+      addressid = #{addressid,jdbcType=INTEGER},
+      cid = #{cid,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      closetime = #{closetime,jdbcType=TIMESTAMP},
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+      courier = #{courier,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      recievetime = #{recievetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shopping.mapper.CommodityMapper" >
+  <resultMap id="BaseResultMap" type="com.shopping.entity.Commodity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="sales" property="sales" jdbcType="INTEGER" />
+    <result column="repertory" property="repertory" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="detailurl" property="detailurl" jdbcType="VARCHAR" />
+    <result column="specsurl" property="specsurl" jdbcType="VARCHAR" />
+    <result column="saleurl" property="saleurl" jdbcType="VARCHAR" />
+    <result column="subname" property="subname" jdbcType="VARCHAR" />
+    <result column="retail" property="retail" jdbcType="INTEGER" />
+    <result column="isintegral" property="isintegral" jdbcType="INTEGER" />
+    <result column="beretail" property="beretail" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, url, price, sales, repertory, createTime, updateTime, status, type, detailurl, 
+    specsurl, saleurl, subname, retail, isintegral, beretail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCommodity" resultMap="BaseResultMap"  parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from commodity
+    <where>
+      <if test="name!=null">
+        name like "%"#{name}"%"
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.shopping.entity.Commodity" >
+    insert into commodity (id, name, url, 
+      price, sales, repertory, 
+      createTime, updateTime, status, 
+      type, detailurl, specsurl, 
+      saleurl, subname, retail, 
+      isintegral, beretail)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{sales,jdbcType=INTEGER}, #{repertory,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{detailurl,jdbcType=VARCHAR}, #{specsurl,jdbcType=VARCHAR}, 
+      #{saleurl,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, #{retail,jdbcType=INTEGER}, 
+      #{isintegral,jdbcType=INTEGER}, #{beretail,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shopping.entity.Commodity" useGeneratedKeys="true" keyProperty="id">
+    insert into commodity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="sales != null" >
+        sales,
+      </if>
+      <if test="repertory != null" >
+        repertory,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="detailurl != null" >
+        detailurl,
+      </if>
+      <if test="specsurl != null" >
+        specsurl,
+      </if>
+      <if test="saleurl != null" >
+        saleurl,
+      </if>
+      <if test="subname != null" >
+        subname,
+      </if>
+      <if test="retail != null" >
+        retail,
+      </if>
+      <if test="isintegral != null" >
+        isintegral,
+      </if>
+      <if test="beretail != null" >
+        beretail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="sales != null" >
+        #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="repertory != null" >
+        #{repertory,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="detailurl != null" >
+        #{detailurl,jdbcType=VARCHAR},
+      </if>
+      <if test="specsurl != null" >
+        #{specsurl,jdbcType=VARCHAR},
+      </if>
+      <if test="saleurl != null" >
+        #{saleurl,jdbcType=VARCHAR},
+      </if>
+      <if test="subname != null" >
+        #{subname,jdbcType=VARCHAR},
+      </if>
+      <if test="retail != null" >
+        #{retail,jdbcType=INTEGER},
+      </if>
+      <if test="isintegral != null" >
+        #{isintegral,jdbcType=INTEGER},
+      </if>
+      <if test="beretail != null" >
+        #{beretail,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shopping.entity.Commodity" >
+    update commodity
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="sales != null" >
+        sales = #{sales,jdbcType=INTEGER},
+      </if>
+      <if test="repertory != null" >
+        repertory = repertory+#{repertory,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="detailurl != null" >
+        detailurl = #{detailurl,jdbcType=VARCHAR},
+      </if>
+      <if test="specsurl != null" >
+        specsurl = #{specsurl,jdbcType=VARCHAR},
+      </if>
+      <if test="saleurl != null" >
+        saleurl = #{saleurl,jdbcType=VARCHAR},
+      </if>
+      <if test="subname != null" >
+        subname = #{subname,jdbcType=VARCHAR},
+      </if>
+      <if test="retail != null" >
+        retail = #{retail,jdbcType=INTEGER},
+      </if>
+      <if test="isintegral != null" >
+        isintegral = #{isintegral,jdbcType=INTEGER},
+      </if>
+      <if test="beretail != null" >
+        beretail = #{beretail,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shopping.entity.Commodity" >
+    update commodity
+    set name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      sales = #{sales,jdbcType=INTEGER},
+      repertory = #{repertory,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      detailurl = #{detailurl,jdbcType=VARCHAR},
+      specsurl = #{specsurl,jdbcType=VARCHAR},
+      saleurl = #{saleurl,jdbcType=VARCHAR},
+      subname = #{subname,jdbcType=VARCHAR},
+      retail = #{retail,jdbcType=INTEGER},
+      isintegral = #{isintegral,jdbcType=INTEGER},
+      beretail = #{beretail,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
