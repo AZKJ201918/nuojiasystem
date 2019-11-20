@@ -127,6 +127,7 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Override
     public void addCommodityAttribute(Commodity commodity) {
+        System.out.println("     ");
         ValueOperations ops = redisTemplate.opsForValue();
         commodity.setCreatetime(new Date());
         commodityMapper.insertSelective(commodity);
