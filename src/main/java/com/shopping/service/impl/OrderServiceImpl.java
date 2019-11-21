@@ -3,7 +3,9 @@ package com.shopping.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shopping.commons.exception.SuperMarketException;
+import com.shopping.entity.Address;
 import com.shopping.entity.Orders;
+import com.shopping.mapper.AddressMapper;
 import com.shopping.mapper.OrdersMapper;
 import com.shopping.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,19 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrdersMapper ordersMapper;
+    @Autowired
+    private AddressMapper addressMapper;
     @Override
     public PageInfo<Orders> findOrders(Orders orders, Integer page, Integer limit) throws SuperMarketException {
         PageHelper.startPage(page,limit);
         List<Orders> ordersList=ordersMapper.selectOrders(orders);
         if (ordersList==null){
             throw new SuperMarketException("没有符合条件的订单");
+        }
+        for (Orders order:ordersList){
+            Integer addressid = order.getAddressid();
+            Address address = addressMapper.selectByPrimaryKey(addressid);
+            order.setAddress(address);
         }
         PageInfo<Orders> pageInfo = new PageInfo<>(ordersList);
         return pageInfo;

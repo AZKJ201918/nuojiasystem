@@ -37,4 +37,5 @@ public class Orders {
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GTM+8")
     private Date recievetime;
 
+    private Address address;
 }

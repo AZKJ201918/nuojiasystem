@@ -75,7 +75,7 @@
         <!--&lt;!&ndash;//无论字段是什么类型，生成的类属性都是varchar。 可选的（0 or 1） 测试无效 &ndash;&gt;-->
         <!--&lt;!&ndash; <columnOverride column="city_code" jdbcType="VARCHAR" /> &ndash;&gt;-->
     <!--</table>-->
-        <table  tableName="orders" domainObjectName="Orders"
+        <table  tableName="address" domainObjectName="Address"
                 enableInsert="true" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                 enableSelectByExample="false" selectByExampleQueryId="false">
             <!-- 忽略字段 可选的（0 or 1） -->

@@ -45,15 +45,28 @@ public class OrderController {
         }
         return result;
     }
-    @ApiOperation(value = "修改订单为已发货",notes = "修改订单",httpMethod = "POST")
+    @ApiOperation(value = "修改订单为已发货",notes = "根据订单的orderid修改",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateOrder")
     public ApiResult updateOrder(@RequestBody Orders orders){
-        ApiResult<Object> result = new ApiResult<>();
-        if (orders.getStatus()!=3){
-            result.setMessage("只能修改订单状态为已发货");
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            if (orders.getStatus()!=3){
+                result.setMessage("只能修改订单状态为已发货");
+                result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                return result;
+            }
+            orderService.modifyOrders(orders);
+        } catch (SuperMarketException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(Constants.RESP_STATUS_BADREQUEST);
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
-        orderService.modifyOrders(orders);
         return result;
     }
 }

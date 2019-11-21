@@ -7,6 +7,7 @@ import com.shopping.entity.*;
 import com.shopping.mapper.*;
 import com.shopping.service.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class CommodityServiceImpl implements CommodityService {
     public PageInfo<Commodity> findCommodityAttribute(String name, Integer page, Integer limit) throws SuperMarketException {
         PageHelper.startPage(page,limit);
         List<Commodity> commodityList = commodityMapper.selectCommodity(name);
-        ValueOperations ops = redisTemplate.opsForValue();
+        HashOperations hos = redisTemplate.opsForHash();
         if (commodityList==null){
             throw new SuperMarketException("没有商品");
         }
@@ -44,12 +45,13 @@ public class CommodityServiceImpl implements CommodityService {
             Integer id = commodity.getId();
             Integer isintegral = commodity.getIsintegral();
             Integer retail = commodity.getRetail();
+            //商品流水查出来
+            Volumn volumn=volumnMapper.selectVolumnByCid(id);
+            commodity.setVolumn(volumn);
             Commercial commercial = commercialMapper.selectByCid(id);
             if (commercial!=null) {
                 String aid = commercial.getAid();
                 System.out.println(aid);
-                Integer repertory = (Integer) ops.get(id + "");
-                commodity.setRepertory(repertory);
                 if (aid != null && !aid.equals("")) {
                     List<Activity> activityList = activityMapper.selectActivityByAid(aid);
                     System.out.println(activityList);
@@ -57,17 +59,25 @@ public class CommodityServiceImpl implements CommodityService {
                 }
                 commodity.setCommercial(commercial);
             }
-            //商品流水查出来
-            Volumn volumn=volumnMapper.selectVolumnByCid(id);
-            commodity.setVolumn(volumn);
+            Integer repertory = (Integer) hos.get(id + "", "repertory");
+            if (repertory==null){
+                Integer repertory1 = commodity.getRepertory();
+                if (volumn!=null){
+                    Integer volumnNum = volumn.getVolumn();
+                    repertory=repertory1-1;
+                }else {
+                    repertory=repertory1;
+                }
+            }
+            commodity.setRepertory(repertory);
             if (isintegral==1){//是积分商品
                 IntegralCommodity integralCommodity= integralCommodityMapper.selectByCid(id);
                 commodity.setIntegralCommodity(integralCommodity);
             }
             if (retail==1){//是分销商品
-                WholeRetail wholeRetail=wholeRetailMapper.selectByCid(id);
+                //WholeRetail wholeRetail=wholeRetailMapper.selectByCid(id);
                 Retail retailTable=retailMapper.selectByCid(id);
-                commodity.setWholeRetail(wholeRetail);
+                //commodity.setWholeRetail(wholeRetail);
                 commodity.setRetailTable(retailTable);
             }
         }
@@ -79,12 +89,6 @@ public class CommodityServiceImpl implements CommodityService {
     public void modifyCommodityAttribute(Commodity commodity) {
         Integer repertory = commodity.getRepertory();
         Integer id = commodity.getId();
-        ValueOperations ops = redisTemplate.opsForValue();
-        if (repertory!=null){
-            Integer reper = (Integer) ops.get(id + "");
-            reper+=repertory;
-            ops.set(id+"",reper);
-        }
         commodity.setUpdatetime(new Date());
         commodityMapper.updateByPrimaryKeySelective(commodity);
         Commercial commercial = commodity.getCommercial();
@@ -114,7 +118,7 @@ public class CommodityServiceImpl implements CommodityService {
                 retailMapper.insertSelective(retailTable);
             }
         }
-        WholeRetail wholeRetail = commodity.getWholeRetail();
+        /*WholeRetail wholeRetail = commodity.getWholeRetail();
         if (wholeRetail!=null){
             Integer wholeRetailId = wholeRetail.getId();
             if (wholeRetailId!=null){
@@ -122,15 +126,29 @@ public class CommodityServiceImpl implements CommodityService {
             }else {
                 wholeRetailMapper.insertSelective(wholeRetail);
             }
+        }*/
+        if (repertory!=null){
+            HashOperations hos = redisTemplate.opsForHash();
+            Integer repertory1 = (Integer) hos.get(id + "", "repertory");
+            if (repertory1==null){
+                Integer reper=commodityMapper.selectRepertory(id);
+                Integer volumn=commodityMapper.selectVolumn(id);
+                if (volumn==null){
+                    repertory1=reper;
+                }else {
+                    repertory1=reper-volumn;
+                }
+            }
+            repertory1+=repertory;
+            hos.put(id+"","repertory",repertory1);
         }
     }
 
     @Override
     public void addCommodityAttribute(Commodity commodity) {
-        ValueOperations ops = redisTemplate.opsForValue();
         commodity.setCreatetime(new Date());
         commodityMapper.insertSelective(commodity);
-        ops.set(commodity.getId()+"",commodity.getRepertory());
+        Integer repertory = commodity.getRepertory();
         Commercial commercial = commodity.getCommercial();
         if (commercial!=null){
             commercialMapper.insertSelective(commercial);
@@ -143,9 +161,14 @@ public class CommodityServiceImpl implements CommodityService {
         if (retailTable!=null){
             retailMapper.insertSelective(retailTable);
         }
-        WholeRetail wholeRetail = commodity.getWholeRetail();
+        /*WholeRetail wholeRetail = commodity.getWholeRetail();
         if (wholeRetail!=null){
             wholeRetailMapper.insertSelective(wholeRetail);
+        }*/
+        Integer id = commodity.getId();
+        if (repertory!=null){//库存上传
+            HashOperations hos = redisTemplate.opsForHash();
+            hos.put(id+"","repertory",repertory);
         }
     }
 
@@ -155,6 +178,8 @@ public class CommodityServiceImpl implements CommodityService {
         commercialMapper.deleteByCid(id);
         integralCommodityMapper.deleteByCid(id);
         retailMapper.deleteByCid(id);
-        wholeRetailMapper.deleteByCid(id);
+        //wholeRetailMapper.deleteByCid(id);
+        HashOperations hos = redisTemplate.opsForHash();
+        hos.delete(id+"","repertory");
     }
 }

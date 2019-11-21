@@ -23,7 +23,7 @@
     from activity
   </select>
   <select id="selectActivityByAid" resultMap="BaseResultMap" parameterType="String">
-    select type,name from activity where status=1 and id in (${_parameter}) order by sort ASC
+    select id,type,name from activity where status=1 and id in (${_parameter}) order by sort ASC
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from activity
