@@ -43,7 +43,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.shopping.entity.Video" >
     update video
     <set >
-      <if test="videourl != null" >
+      <if test="videourl != null and videourl !=''" >
         videourl = #{videourl,jdbcType=VARCHAR},
       </if>
       <if test="createtime != null" >

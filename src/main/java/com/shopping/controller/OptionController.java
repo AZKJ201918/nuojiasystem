@@ -12,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ public class OptionController {
     @ApiOperation(value = "查看全部按钮",notes = "查看",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/allOption")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult allOption(){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -47,6 +50,7 @@ public class OptionController {
     @ApiOperation(value = "新增按钮",notes = "新增按钮",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertOption")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult insertOption(@RequestBody Options options){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -62,6 +66,7 @@ public class OptionController {
     @ApiOperation(value = "修改按钮",notes = "修改按钮",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateOption")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateOption(@RequestBody Options options){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -77,6 +82,7 @@ public class OptionController {
     @ApiOperation(value = "删除按钮",notes = "删除按钮",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteOption")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult deleteOption(Integer id){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -92,6 +98,7 @@ public class OptionController {
     @ApiOperation(value = "查看全部内链",notes = "查看全部内链",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/selectLink")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult selectLink(){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -108,6 +115,7 @@ public class OptionController {
     @ApiOperation(value = "模糊查询商品",notes = "模糊查询商品",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/likeCommodity")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult likeCommodity(String name,Integer page,Integer limit){
         ApiResult<Object> result = new ApiResult<>();
         try {

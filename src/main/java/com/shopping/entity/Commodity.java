@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class Commodity {
     private Integer id;
@@ -50,4 +52,7 @@ public class Commodity {
     private WholeRetail wholeRetail;//全局表
 
     private Volumn volumn;
+
+    private List<DeatilBanner> deatilBannerList;
+
 }

@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -29,6 +31,7 @@ public class CommodityController {
     @ApiOperation(value = "查看全部商品",notes = "支持模糊查询",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/allCommodity")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult allCommodity(String name,Integer page,Integer limit){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -49,6 +52,7 @@ public class CommodityController {
     @ApiOperation(value = "修改商品",notes = "修改商品",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateCommodity")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     @Transactional(rollbackFor = Exception.class)
     public ApiResult updateCommodity(@RequestBody Commodity commodity){
         ApiResult<Object> result = new ApiResult<>();
@@ -66,6 +70,7 @@ public class CommodityController {
     @ApiOperation(value = "新增商品",notes = "新增商品",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertCommodity")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     @Transactional(rollbackFor = Exception.class)
     public ApiResult insertCommodity(@RequestBody Commodity commodity){
         ApiResult<Object> result = new ApiResult<>();
@@ -83,6 +88,7 @@ public class CommodityController {
     @ApiOperation(value = "删除商品",notes = "删除商品",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteCommodity")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     @Transactional(rollbackFor = Exception.class)
     public ApiResult deleteCommodity(Integer id){
         ApiResult<Object> result = new ApiResult<>();

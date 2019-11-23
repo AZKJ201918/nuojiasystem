@@ -9,6 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,7 @@ public class DetailController {
     private DetailService detailService;
     @ApiOperation(value = "查看某个商品详情的轮播图",notes = "查看某个商品详情的轮播图，此处传商品id",httpMethod = "POST")
     @ApiImplicitParam
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     @PostMapping("/loadDetailBanner ")
     public ApiResult loadDetailBanner(Integer id){
         ApiResult<Object> result = new ApiResult<>();
@@ -48,6 +51,7 @@ public class DetailController {
     @ApiOperation(value = "修改某个商品详情的轮播图",notes = "修改某个商品详情的轮播图",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateDetailBanner")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateDetailBanner(@RequestBody DeatilBanner deatilBanner){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -63,6 +67,7 @@ public class DetailController {
     @ApiOperation(value = "删除某个商品详情的轮播图",notes = "删除某个商品详情的轮播图",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteDetailBanner")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult deleteDetailBanner(Integer id){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -78,6 +83,7 @@ public class DetailController {
     @ApiOperation(value = "新增某个商品详情的轮播图",notes = "新增某个商品详情的轮播图",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertDetailBanner")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult insertDetailBanner(@RequestBody DeatilBanner deatilBanner){
         ApiResult<Object> result = new ApiResult<>();
         try {

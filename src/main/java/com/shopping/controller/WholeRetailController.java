@@ -12,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ public class WholeRetailController {
     @ApiOperation(value = "查看全局分销",notes = "查看",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/wholeRetail")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult wholeRetail(){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -48,6 +51,7 @@ public class WholeRetailController {
     @ApiOperation(value = "修改全局分销",notes = "修改",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateWholeRetail")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateWholeRetail(WholeRetail wholeRetail){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -63,6 +67,7 @@ public class WholeRetailController {
     @ApiOperation(value = "查看签到可以获得的积分",notes = "查看",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/loadIntegral")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult loadIntegral(){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -79,6 +84,7 @@ public class WholeRetailController {
     @ApiOperation(value = "修改签到可以获得的积分",notes = "修改",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateIntegral")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateIntegral(Intergral intergral){
         ApiResult<Object> result = new ApiResult<>();
         try {

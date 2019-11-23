@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ public class ArticleController {
     @ApiOperation(value = "查看公众号文章",notes = "查看公众号文章",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/loadArticle")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult loadArticle(@RequestBody Article article,Integer page,Integer limit){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -43,6 +46,7 @@ public class ArticleController {
     @ApiOperation(value = "修改公众号文章",notes = "修改公众号文章",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateArticle")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateArticle(@RequestBody Article article){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -58,6 +62,7 @@ public class ArticleController {
     @ApiOperation(value = "删除公众号文章",notes = "删除公众号文章",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteArticle")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult deleteArticle(Integer id){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -73,6 +78,7 @@ public class ArticleController {
     @ApiOperation(value = "新增公众号文章",notes = "新增公众号文章",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertArticle")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult insertArticle(@RequestBody Article article){
         ApiResult<Object> result = new ApiResult<>();
         try {

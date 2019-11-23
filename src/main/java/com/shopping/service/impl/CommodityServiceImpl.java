@@ -33,6 +33,8 @@ public class CommodityServiceImpl implements CommodityService {
     private WholeRetailMapper wholeRetailMapper;
     @Autowired
     private VolumnMapper volumnMapper;
+    @Autowired
+    private DeatilBannerMapper deatilBannerMapper;
     @Override
     public PageInfo<Commodity> findCommodityAttribute(String name, Integer page, Integer limit) throws SuperMarketException {
         PageHelper.startPage(page,limit);
@@ -46,8 +48,8 @@ public class CommodityServiceImpl implements CommodityService {
             Integer isintegral = commodity.getIsintegral();
             Integer retail = commodity.getRetail();
             //商品流水查出来
-            Volumn volumn=volumnMapper.selectVolumnByCid(id);
-            commodity.setVolumn(volumn);
+            //Volumn volumn=volumnMapper.selectVolumnByCid(id);
+            //commodity.setVolumn(volumn);
             Commercial commercial = commercialMapper.selectByCid(id);
             if (commercial!=null) {
                 String aid = commercial.getAid();
@@ -62,14 +64,16 @@ public class CommodityServiceImpl implements CommodityService {
             Integer repertory = (Integer) hos.get(id + "", "repertory");
             if (repertory==null){
                 Integer repertory1 = commodity.getRepertory();
-                if (volumn!=null){
+                /*if (volumn!=null){
                     Integer volumnNum = volumn.getVolumn();
                     repertory=repertory1-1;
-                }else {
+                }else {*/
                     repertory=repertory1;
-                }
+                /*}*/
             }
             commodity.setRepertory(repertory);
+            List<DeatilBanner> deatilBannerList = deatilBannerMapper.selectDetailBannerByCid(id);
+            commodity.setDeatilBannerList(deatilBannerList);
             if (isintegral==1){//是积分商品
                 IntegralCommodity integralCommodity= integralCommodityMapper.selectByCid(id);
                 commodity.setIntegralCommodity(integralCommodity);
@@ -127,6 +131,18 @@ public class CommodityServiceImpl implements CommodityService {
                 wholeRetailMapper.insertSelective(wholeRetail);
             }
         }*/
+        List<DeatilBanner> deatilBannerList = commodity.getDeatilBannerList();
+        if (deatilBannerList!=null){
+            Integer deatilBannerId=null;
+            for (DeatilBanner deatilBanner:deatilBannerList){
+                deatilBannerId = deatilBanner.getId();
+                if (deatilBannerId!=null){
+                    deatilBannerMapper.updateByPrimaryKeySelective(deatilBanner);
+                }else {
+                    deatilBannerMapper.insertSelective(deatilBanner);
+                }
+            }
+        }
         if (repertory!=null){
             HashOperations hos = redisTemplate.opsForHash();
             Integer repertory1 = (Integer) hos.get(id + "", "repertory");
@@ -165,6 +181,12 @@ public class CommodityServiceImpl implements CommodityService {
         if (wholeRetail!=null){
             wholeRetailMapper.insertSelective(wholeRetail);
         }*/
+        List<DeatilBanner> deatilBannerList = commodity.getDeatilBannerList();
+        for (DeatilBanner deatilBanner:deatilBannerList){
+            if (deatilBanner!=null){
+                deatilBannerMapper.insertSelective(deatilBanner);
+            }
+        }
         Integer id = commodity.getId();
         if (repertory!=null){//库存上传
             HashOperations hos = redisTemplate.opsForHash();
@@ -178,6 +200,7 @@ public class CommodityServiceImpl implements CommodityService {
         commercialMapper.deleteByCid(id);
         integralCommodityMapper.deleteByCid(id);
         retailMapper.deleteByCid(id);
+        deatilBannerMapper.deleteByCid(id);
         //wholeRetailMapper.deleteByCid(id);
         HashOperations hos = redisTemplate.opsForHash();
         hos.delete(id+"","repertory");

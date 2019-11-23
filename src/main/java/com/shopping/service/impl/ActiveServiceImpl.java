@@ -21,10 +21,10 @@ public class ActiveServiceImpl implements ActiveService {
     @Override
     public Commercial findActivity(Integer id) throws SuperMarketException {
         Commercial commercial = commercialMapper.selectByCid(id);
-        String aid = commercial.getAid();
         if (commercial==null){
             throw new SuperMarketException("该商品没有活动");
         }
+        String aid = commercial.getAid();
         System.out.println(aid);
         if (aid!=null&&!aid.equals("")){
             List<Activity> activityList= activityMapper.selectActivityByAid(aid);

@@ -1,0 +1,24 @@
+<?xml   version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.mapper.UserMapper">
+    <select id="selectUser" resultType="User" parameterType="String">
+        SELECT u.name,u.password,u.uid,ur.id,r.rname from user u INNER JOIN user_role ur ON u.uid=ur.uid INNER JOIN role r ON ur.rid=r.rid
+        <where>
+            <if test="name!=null">
+                name like "%"#{name}"%"
+            </if>
+        </where>
+    </select>
+    <update id="updateUser" parameterType="User">
+        UPDATE user 
+        <set>
+            <if test="name!=null">
+                name =#{name},
+            </if>
+            <if test="password!=null">
+                password=#{password}
+            </if>
+        </set>
+        where uid=#{uid}
+    </update>
+</mapper>   

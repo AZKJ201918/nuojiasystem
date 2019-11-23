@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,7 @@ public class OrderController {
     @ApiOperation(value = "查看全部订单",notes = "支持模糊查询",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/allOrder")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult allOrder(@RequestBody Orders orders,Integer page,Integer limit){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -48,6 +51,7 @@ public class OrderController {
     @ApiOperation(value = "修改订单为已发货",notes = "根据订单的orderid修改",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateOrder")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult updateOrder(@RequestBody Orders orders){
         ApiResult<Object> result = null;
         try {

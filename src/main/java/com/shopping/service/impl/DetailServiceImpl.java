@@ -29,7 +29,7 @@ public class DetailServiceImpl implements DetailService {
 
     @Override
     public void removeDetailBanner(Integer id) {
-        deatilBannerMapper.deleteByPrimaryKey(id);
+        deatilBannerMapper.deleteByCid(id);
     }
 
     @Override

@@ -11,6 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,7 @@ public class VideoController {
     @ApiOperation(value = "查看全部视频",notes = "查看",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/allVideo")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
     public ApiResult allVideo(Integer page,Integer limit){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -48,6 +51,7 @@ public class VideoController {
     @ApiOperation(value = "新增视频",notes = "新增",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/insertVideo")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult insertVideo(@RequestBody Video video){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -63,6 +67,7 @@ public class VideoController {
     @ApiOperation(value = "七牛云上传视频",notes = "上传",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/uploadVideo")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult uploadVideo(MultipartFile file){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -79,6 +84,7 @@ public class VideoController {
     @ApiOperation(value = "删除视频",notes = "删除",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/deleteVideo")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult insertVideo(Integer id){
         ApiResult<Object> result = new ApiResult<>();
         try {
@@ -94,6 +100,7 @@ public class VideoController {
     @ApiOperation(value = "修改视频",notes = "修改",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/updateVideo")
+    @RequiresRoles(value={"root","admin"},logical= Logical.OR)
     public ApiResult updateVideo(@RequestBody Video video){
         ApiResult<Object> result = new ApiResult<>();
         try {

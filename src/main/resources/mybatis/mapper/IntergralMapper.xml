@@ -54,7 +54,6 @@
         integral = #{integral,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.shopping.entity.Intergral" >
     update intergral
