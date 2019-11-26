@@ -26,4 +26,6 @@ public interface UserMapper {
     User selectName(String username);
     @Select("select r.remark from user u inner join user_role ur on u.uid=ur.uid inner join role r on ur.rid=r.rid where u.name=#{name} and u.password=#{password}")
     List<String> selectRoles(User user);
+    @Select("select rid,rname,remark from role")
+    List<User> SelectAllRoles();
 }

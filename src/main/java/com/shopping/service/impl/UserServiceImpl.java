@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
         userMapper.insertUser(user);
         String password = user.getPassword();
         if (password!=null){
-            password= MD5Util.encrypt(password);
+           /* password= MD5Util.encrypt(password);*/
             user.setPassword(password);
         }
         if (user.getRid()!=null){
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService{
     public void modifyUser(User user) {
         String password = user.getPassword();
         if (password!=null){
-            password=MD5Util.encrypt(password);
+           /* password=MD5Util.encrypt(password);*/
             user.setPassword(password);
         }
         userMapper.updateUser(user);
@@ -68,5 +68,10 @@ public class UserServiceImpl implements UserService{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<User> FindAllRoles() {
+        return userMapper.SelectAllRoles();
     }
 }

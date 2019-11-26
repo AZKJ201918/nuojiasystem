@@ -63,6 +63,19 @@ public class UserController {
     public ApiResult insertUser(User user){
         ApiResult<Object> result = new ApiResult<>();
         try {
+            if (user.getRid()==1){
+                result.setMessage("不能新增角色为系统管理员");
+                result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                return result;
+            }
+            if (user.getName()!=null){
+                boolean flag=userService.findUserExsits(user.getName());
+                if (flag){
+                    result.setMessage("用户名已存在");
+                    result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                    return result;
+                }
+            }
             userService.addUser(user);
             result.setMessage("新增用户成功");
         } catch (Exception e) {
@@ -79,6 +92,19 @@ public class UserController {
     public ApiResult updateUser(User user){
         ApiResult<Object> result = new ApiResult<>();
         try {
+            if (user.getRid()==1){
+                result.setMessage("不能修改角色为系统管理员");
+                result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                return result;
+            }
+            if (user.getName()!=null){
+                boolean flag=userService.findUserExsits(user.getName());
+                if (flag){
+                    result.setMessage("用户名已存在");
+                    result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                    return result;
+                }
+            }
             userService.modifyUser(user);
             result.setMessage("修改用户成功");
         } catch (Exception e) {
@@ -147,7 +173,7 @@ public class UserController {
         }
         return result;
     }
-    @ApiOperation(value = "查看用户的角色",notes = "查看角色",httpMethod = "POST")
+    @ApiOperation(value = "查看当前用户用户的角色",notes = "查看角色",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("role")
     public ApiResult role(){
@@ -156,6 +182,22 @@ public class UserController {
             Subject subject = SecurityUtils.getSubject();
             Session session = subject.getSession(true);
             Object roles = session.getAttribute("roles");
+            result.setData(roles);
+            result.setMessage("查看用户角色成功");
+        } catch (InvalidSessionException e) {
+            e.printStackTrace();
+            result.setMessage("服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看所有用户的角色",notes = "查看所有角色",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("allRole")
+    public ApiResult allRole(){
+        ApiResult<Object> result = new ApiResult<>();
+        try {
+            List<User> roles=userService.FindAllRoles();
             result.setData(roles);
             result.setMessage("查看用户角色成功");
         } catch (InvalidSessionException e) {

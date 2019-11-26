@@ -1,0 +1,69 @@
+<?xml   version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--代理扫描  namespace属性表示当前代理的命名空间，
+    属性值一般情况下等于dao的接口类地址  相当于dao接口实现类   -->
+<mapper namespace="com.shopping.mapper.CensusMapper">
+    <!--这里会有增删改查的标签-->
+    <select id="selectVolumeAndMoney" resultType="Map">
+        SELECT a.click_date as click_date,IFNULL(b.num,0) as num,IFNULL(b.money,0) as money
+            FROM (
+            SELECT CURDATE() AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS click_date
+            ) a LEFT JOIN (
+            SELECT DATE(paytime) AS DATETIME, SUM(num) AS num,SUM(finalprice) AS money
+            FROM orders o INNER JOIN ordercommodity oc ON o.orderid=oc.orderid
+            GROUP BY DATE(paytime)
+            ) b ON a.click_date = b.datetime;
+    </select>
+    <select id="selectVolumeAndMoneyWithCid" resultType="Map">
+        SELECT a.click_date as click_date,IFNULL(b.num,0) AS num
+            FROM (
+            SELECT CURDATE() AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS click_date
+            ) a LEFT JOIN (
+            SELECT DATE(paytime) AS DATETIME, SUM(num) AS num
+            FROM orders o INNER JOIN ordercommodity oc ON o.orderid=oc.orderid where oc.cid=#{id}
+            GROUP BY DATE(paytime)
+            ) b ON a.click_date = b.datetime;
+    </select>
+    <select id="selectVisitAndRegister" resultType="Map">
+        SELECT a.click_date AS click_date,IFNULL(b.visit,0) AS visit,IFNULL(b.register,0) AS register
+            FROM (
+            SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) AS click_date
+            UNION ALL
+            SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS click_date
+            ) a LEFT JOIN (
+            SELECT DATE(createtime) AS createtime,visit,register FROM record
+            ) b ON a.click_date = b.createtime;
+    </select>
+</mapper>   

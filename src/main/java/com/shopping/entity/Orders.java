@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 @Data
 public class Orders {
     private Integer id;
@@ -38,4 +41,11 @@ public class Orders {
     private Date recievetime;
 
     private Address address;
+
+    private List<Map<String,Object>> cidAndNum;
+
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GTM+8")
+    private Date starttime;
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GTM+8")
+    private Date endtime;
 }
