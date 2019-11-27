@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -61,15 +62,16 @@ public class CommodityServiceImpl implements CommodityService {
                 }
                 commodity.setCommercial(commercial);
             }
-            Integer repertory = (Integer) hos.get(id + "", "repertory");
+            Integer repertory = (Integer) hos.get("repertory:"+id + "", "repertory");
             if (repertory==null){
                 Integer repertory1 = commodity.getRepertory();
-                /*if (volumn!=null){
-                    Integer volumnNum = volumn.getVolumn();
-                    repertory=repertory1-1;
-                }else {*/
+                String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                Integer volumn=commodityMapper.selectVolumn(id,format);
+                if (volumn==null){
                     repertory=repertory1;
-                /*}*/
+                }else {
+                    repertory=repertory1-volumn;
+                }
             }
             commodity.setRepertory(repertory);
             List<DeatilBanner> deatilBannerList = deatilBannerMapper.selectDetailBannerByCid(id);
@@ -145,10 +147,11 @@ public class CommodityServiceImpl implements CommodityService {
         }
         if (repertory!=null){
             HashOperations hos = redisTemplate.opsForHash();
-            Integer repertory1 = (Integer) hos.get(id + "", "repertory");
+            Integer repertory1 = (Integer) hos.get("repertory:"+id + "", "repertory");
             if (repertory1==null){
                 Integer reper=commodityMapper.selectRepertory(id);
-                Integer volumn=commodityMapper.selectVolumn(id);
+                String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                Integer volumn=commodityMapper.selectVolumn(id,format);
                 if (volumn==null){
                     repertory1=reper;
                 }else {
@@ -156,7 +159,7 @@ public class CommodityServiceImpl implements CommodityService {
                 }
             }
             repertory1+=repertory;
-            hos.put(id+"","repertory",repertory1);
+            hos.put("repertory:"+id+"","repertory",repertory1);
         }
     }
 
@@ -190,7 +193,7 @@ public class CommodityServiceImpl implements CommodityService {
         Integer id = commodity.getId();
         if (repertory!=null){//库存上传
             HashOperations hos = redisTemplate.opsForHash();
-            hos.put(id+"","repertory",repertory);
+            hos.put("repertory:"+id+"","repertory",repertory);
         }
     }
 
@@ -203,6 +206,6 @@ public class CommodityServiceImpl implements CommodityService {
         deatilBannerMapper.deleteByCid(id);
         //wholeRetailMapper.deleteByCid(id);
         HashOperations hos = redisTemplate.opsForHash();
-        hos.delete(id+"","repertory");
+        hos.delete("repertory:"+id+"","repertory");
     }
 }

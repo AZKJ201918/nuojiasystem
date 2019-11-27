@@ -1,10 +1,13 @@
 package com.shopping.controller;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.shopping.commons.constans.Constants;
 import com.shopping.commons.exception.SuperMarketException;
 import com.shopping.commons.resp.ApiResult;
 import com.shopping.entity.VolumeAndMoney;
 import com.shopping.service.CensusService;
+import com.shopping.util.UrlUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +20,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +62,15 @@ public class CensusController {
         ApiResult<Object> result = new ApiResult<>();
         try {
             List<Map<String,Object>> visitAndRegisterList=censusService.findVisitAndRegister();
+            String url="http://localhost:555/todayVisit";
+            JSONObject jsonObject = UrlUtils.doPostJson(url);
+            Integer registerCount = jsonObject.getInteger("registerCount");
+            Integer visitCount = jsonObject.getInteger("visitCount");
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("register",registerCount);
+            map.put("visit",visitCount);
+            map.put("click_date",new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            visitAndRegisterList.add(map);
             result.setMessage("查看成功");
             result.setData(visitAndRegisterList);
         } catch (Exception e) {

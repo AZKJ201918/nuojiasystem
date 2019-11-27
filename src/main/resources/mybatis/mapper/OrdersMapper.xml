@@ -47,6 +47,11 @@
       </if>
     </where>
   </select>
+  <select id="selectOrders" parameterType="Orders" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from orders where status=2
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from orders
     where id = #{id,jdbcType=INTEGER}

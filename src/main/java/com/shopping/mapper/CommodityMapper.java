@@ -22,6 +22,6 @@ public interface CommodityMapper {
     List<Commodity> selectCommodity(@Param("name") String name);
     @Select("select repertory from commodity where id=#{id}")
     Integer selectRepertory(Integer id);
-    @Select("select volumn from volumn where cid=#{id}")
-    Integer selectVolumn(Integer id);
+    @Select("select ifnull(sum(num),0) from volumnwater where cid=#{id} and date(createtime)=#{format}")
+    Integer selectVolumn(@Param("id") Integer id,@Param("format")String format);
 }

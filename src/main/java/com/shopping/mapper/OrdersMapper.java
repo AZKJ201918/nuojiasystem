@@ -31,4 +31,6 @@ public interface OrdersMapper {
     List<Map<String,Object>> selectOrderCommodity(String orderid);
     @Select("select id,name,subname,url from commodity where id in (${substring})")
     List<Commodity> selectCommodityByCid(@Param("substring") String substring);
+
+    List<Orders> selectDaiSendOrder();
 }

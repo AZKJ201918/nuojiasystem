@@ -66,4 +66,37 @@ public class OrderServiceImpl implements OrderService {
          orders.setSendtime(new Date());
          ordersMapper.updateOrdersStatus(orders);
     }
+
+    @Override
+    public List<Orders> findDaiSendOrder() throws SuperMarketException {
+        List<Orders> ordersList=ordersMapper.selectDaiSendOrder();
+        if (ordersList==null){
+            throw new SuperMarketException("没有符合条件的订单");
+        }
+        for (Orders order:ordersList){
+            Integer addressid = order.getAddressid();
+            String orderid = order.getOrderid();
+            Address address = addressMapper.selectByPrimaryKey(addressid);
+            order.setAddress(address);
+            List<Map<String,Object>> orderCommodityList=ordersMapper.selectOrderCommodity(orderid);
+            order.setCidAndNum(orderCommodityList);
+            String cids="";
+            for (Map<String,Object> map:orderCommodityList){
+                Integer cid = (Integer) map.get("cid");
+                cids+=cid+",";
+            }
+            int i = cids.lastIndexOf(",");
+            String substring = cids.substring(0, i);
+            List<Commodity> commodityList=ordersMapper.selectCommodityByCid(substring);
+            for (Map<String,Object> map:orderCommodityList){
+                Integer cid = (Integer) map.get("cid");
+                for (Commodity commodity:commodityList){
+                    if (commodity.getId()==cid){
+                        map.put("commodity",commodity);
+                    }
+                }
+            }
+        }
+        return ordersList;
+    }
 }

@@ -18,7 +18,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, cid, subtract, fulld, fulldiscount, postage, fulls, fullsubtract, discount, aid, 
-    startTime, endTime, status
+    startTime, endTime,status
   </sql>
   <select id="selectByCid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

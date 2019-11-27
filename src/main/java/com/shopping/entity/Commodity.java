@@ -55,4 +55,6 @@ public class Commodity {
 
     private List<DeatilBanner> deatilBannerList;
 
+    private Double postage;
+
 }

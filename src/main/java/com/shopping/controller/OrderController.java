@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -72,5 +69,18 @@ public class OrderController {
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
+    }
+    @ApiOperation(value = "导出订单",notes = "导出订单",httpMethod = "GET")
+    @ApiImplicitParam
+    @GetMapping("/importOrder")
+    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
+    public void importOrder(){
+        try {
+            List<Orders> ordersList=orderService.findDaiSendOrder();
+        } catch (SuperMarketException e) {
+            e.printStackTrace();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
