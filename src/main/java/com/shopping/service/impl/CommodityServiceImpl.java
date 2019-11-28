@@ -167,16 +167,20 @@ public class CommodityServiceImpl implements CommodityService {
     public void addCommodityAttribute(Commodity commodity) {
         commodity.setCreatetime(new Date());
         commodityMapper.insertSelective(commodity);
+        System.out.println("返回的主键是"+commodity.getId());
         Integer repertory = commodity.getRepertory();
         Commercial commercial = commodity.getCommercial();
+        commercial.setCid(commodity.getId());
         if (commercial!=null){
             commercialMapper.insertSelective(commercial);
         }
         IntegralCommodity integralCommodity = commodity.getIntegralCommodity();
+        integralCommodity.setCid(commodity.getId());
         if (integralCommodity!=null){
             integralCommodityMapper.insertSelective(integralCommodity);
         }
         Retail retailTable = commodity.getRetailTable();
+        retailTable.setCid(commodity.getId());
         if (retailTable!=null){
             retailMapper.insertSelective(retailTable);
         }
@@ -186,6 +190,7 @@ public class CommodityServiceImpl implements CommodityService {
         }*/
         List<DeatilBanner> deatilBannerList = commodity.getDeatilBannerList();
         for (DeatilBanner deatilBanner:deatilBannerList){
+            deatilBanner.setCid(commodity.getId());
             if (deatilBanner!=null){
                 deatilBannerMapper.insertSelective(deatilBanner);
             }

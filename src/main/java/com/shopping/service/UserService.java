@@ -18,4 +18,8 @@ public interface UserService {
     boolean findUserExsits(String name);
 
     List<User> FindAllRoles();
+
+    boolean findUserExsits1(String name, Integer uid);
+
+    Integer findMyRid(Integer uid);
 }

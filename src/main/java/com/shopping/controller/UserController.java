@@ -92,13 +92,16 @@ public class UserController {
     public ApiResult updateUser(User user){
         ApiResult<Object> result = new ApiResult<>();
         try {
-            if (user.getRid()==1){
-                result.setMessage("不能修改角色为系统管理员");
-                result.setCode(Constants.RESP_STATUS_BADREQUEST);
-                return result;
+            Integer myRid=userService.findMyRid(user.getUid());
+            if (myRid!=1){
+                if (user.getRid()==1){
+                    result.setMessage("不能修改角色为系统管理员");
+                    result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                    return result;
+                }
             }
             if (user.getName()!=null){
-                boolean flag=userService.findUserExsits(user.getName());
+                boolean flag=userService.findUserExsits1(user.getName(),user.getUid());
                 if (flag){
                     result.setMessage("用户名已存在");
                     result.setCode(Constants.RESP_STATUS_BADREQUEST);

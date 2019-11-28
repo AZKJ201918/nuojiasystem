@@ -4,8 +4,10 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -22,7 +24,8 @@ public class ShiroConfig {
     MyRealm myRealm() {
         return new MyRealm();
     }
-
+    @Autowired
+    private RedisSessionDao redisSessionDao;
     @Bean(name = "securityManager")
     DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
@@ -30,6 +33,7 @@ public class ShiroConfig {
         WebSessionManager sessionManager = new WebSessionManager();
         sessionManager.setSessionIdCookieEnabled(false);//关闭cookie
         sessionManager.setSessionIdUrlRewritingEnabled(false);//关闭url后携带sessionId
+        sessionManager.setSessionDAO(redisSessionDao);//redis外置session
         manager.setSessionManager(sessionManager);
         return manager;
     }
@@ -55,6 +59,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**","anon");
         filterChainDefinitionMap.put("/v2/**","anon");
+        filterChainDefinitionMap.put("/importOrder","anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

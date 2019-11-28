@@ -41,7 +41,9 @@ public class Constants {
 
     public static final String QINIU_HEAD_IMG_BUCKET_NAME="whazkj";
 
-    public static final String QINIU_HEAD_IMG_BUCKET_URL="http://q0jf94eoj.bkt.clouddn.com";
+    //public static final String QINIU_HEAD_IMG_BUCKET_URL="http://q0jf94eoj.bkt.clouddn.com";
+
+    public static final String QINIU_HEAD_IMG_BUCKET_URL="http://njl.azwst.co/";
 
     /***七牛keys end****/
 

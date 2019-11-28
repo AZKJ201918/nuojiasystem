@@ -5,7 +5,9 @@ import com.shopping.commons.constans.Constants;
 import com.shopping.commons.exception.SuperMarketException;
 import com.shopping.commons.resp.ApiResult;
 import com.shopping.entity.Orders;
+import com.shopping.entity.PrintOrder;
 import com.shopping.service.OrderService;
+import com.shopping.util.ExcelUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +17,10 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -73,10 +78,24 @@ public class OrderController {
     @ApiOperation(value = "导出订单",notes = "导出订单",httpMethod = "GET")
     @ApiImplicitParam
     @GetMapping("/importOrder")
-    @RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
-    public void importOrder(){
+    //@RequiresRoles(value={"root","admin","orders"},logical= Logical.OR)
+    public void importOrder(HttpServletResponse response){
         try {
-            List<Orders> ordersList=orderService.findDaiSendOrder();
+            List<PrintOrder> ordersList=orderService.findDaiSendOrder();
+            LinkedHashMap fieldMap = new LinkedHashMap();
+            String sheetName = "订单信息表";
+            fieldMap.put("orderid", "订单号");
+            fieldMap.put("finalprice", "成交价格");
+            fieldMap.put("cname","商品名称");
+            fieldMap.put("subname","商品副标题");
+            fieldMap.put("num","商品数量");
+            fieldMap.put("name","收件人姓名");
+            fieldMap.put("phone","收件人联系方式");
+            fieldMap.put("province","省份");
+            fieldMap.put("city","城市");
+            fieldMap.put("area","区/县");
+            fieldMap.put("detail","详细地址");
+            ExcelUtil.listToExcel(ordersList, fieldMap, sheetName, response);
         } catch (SuperMarketException e) {
             e.printStackTrace();
         }catch (Exception e) {

@@ -2,6 +2,7 @@ package com.shopping.config.shiro;
 
 import com.shopping.entity.User;
 import com.shopping.mapper.UserMapper;
+import com.shopping.util.MD5Util1;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -52,6 +53,7 @@ public class MyRealm extends AuthorizingRealm {
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
         User user = userMapper.selectName(username);
+        password=MD5Util1.getMD5(password);
         //账号不存在
         if (user == null) {
             throw new UnknownAccountException();

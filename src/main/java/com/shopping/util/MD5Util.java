@@ -18,9 +18,9 @@ public class MD5Util {
 
     private static final int HASH_ITERATIONS = 5;
 
-    public static String encrypt(String password) {
+    public static String encrypt(String password,String userename) {
         //String source = StringUtils.lowerCase(username);
         password = StringUtils.lowerCase(password);
-        return new SimpleHash(ALGORITH_NAME, password, HASH_ITERATIONS).toHex();
+        return new SimpleHash(ALGORITH_NAME,userename,password, HASH_ITERATIONS).toHex();
     }
 }

@@ -3,6 +3,7 @@ package com.shopping.service;
 import com.github.pagehelper.PageInfo;
 import com.shopping.commons.exception.SuperMarketException;
 import com.shopping.entity.Orders;
+import com.shopping.entity.PrintOrder;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface OrderService {
 
     void modifyOrders(Orders orders) throws SuperMarketException;
 
-    List<Orders> findDaiSendOrder() throws SuperMarketException;
+    List<PrintOrder> findDaiSendOrder() throws SuperMarketException;
 }

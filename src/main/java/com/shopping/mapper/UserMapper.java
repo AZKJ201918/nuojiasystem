@@ -28,4 +28,8 @@ public interface UserMapper {
     List<String> selectRoles(User user);
     @Select("select rid,rname,remark from role")
     List<User> SelectAllRoles();
+    @Select("select count(*) from user where name=#{name} and uid!=#{uid}")
+    Integer selectUserExsits1(@Param("name") String name,@Param("uid") Integer uid);
+    @Select("select rid from user_role where uid=#{uid}")
+    Integer selectMyRid(Integer uid);
 }

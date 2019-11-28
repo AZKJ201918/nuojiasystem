@@ -2,9 +2,9 @@ package com.shopping.mapper;
 
 import com.shopping.entity.Commodity;
 import com.shopping.entity.Orders;
+import com.shopping.entity.PrintOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -32,5 +32,5 @@ public interface OrdersMapper {
     @Select("select id,name,subname,url from commodity where id in (${substring})")
     List<Commodity> selectCommodityByCid(@Param("substring") String substring);
 
-    List<Orders> selectDaiSendOrder();
+    List<PrintOrder> selectDaiSendOrder();
 }

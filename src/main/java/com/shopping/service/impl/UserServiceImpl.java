@@ -7,6 +7,7 @@ import com.shopping.entity.User;
 import com.shopping.mapper.UserMapper;
 import com.shopping.service.UserService;
 import com.shopping.util.MD5Util;
+import com.shopping.util.MD5Util1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService{
         userMapper.insertUser(user);
         String password = user.getPassword();
         if (password!=null){
-           /* password= MD5Util.encrypt(password);*/
+            password= MD5Util1.getMD5(password);
             user.setPassword(password);
         }
         if (user.getRid()!=null){
@@ -43,8 +44,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public void modifyUser(User user) {
         String password = user.getPassword();
-        if (password!=null){
-           /* password=MD5Util.encrypt(password);*/
+        if (password!=null&&password!=""){
+            password= MD5Util1.getMD5(password);
             user.setPassword(password);
         }
         userMapper.updateUser(user);
@@ -73,5 +74,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> FindAllRoles() {
         return userMapper.SelectAllRoles();
+    }
+
+    @Override
+    public boolean findUserExsits1(String name, Integer uid) {
+        Integer count = userMapper.selectUserExsits1(name, uid);
+        if (count>=1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Integer findMyRid(Integer uid) {
+        return userMapper.selectMyRid(uid);
     }
 }

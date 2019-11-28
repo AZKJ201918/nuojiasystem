@@ -47,10 +47,9 @@
       </if>
     </where>
   </select>
-  <select id="selectOrders" parameterType="Orders" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from orders where status=2
+  <select id="selectDaiSendOrder" resultType="PrintOrder">
+    SELECT o.orderid as orderid,o.finalprice as finalprice,oc.num as num,c.name AS cname,c.subname as subname,a.name as name,a.phone as phone,a.city as city,a.province as province,a.area as area,a.detail as detail FROM orders o
+    INNER JOIN ordercommodity oc ON o.orderid=oc.orderid INNER JOIN address a ON o.addressid=a.id INNER JOIN commodity c ON oc.cid=c.id WHERE o.status=2
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from orders

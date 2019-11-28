@@ -1,7 +1,13 @@
 package com.shopping.config.shiro;
 
+import org.apache.catalina.manager.util.SessionUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionContext;
+import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionContext;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -50,6 +56,11 @@ public class WebSessionManager extends DefaultWebSessionManager {
         String token = request.getHeader(HEADER_TOKEN_NAME);
         if (token == null) {
             token = UUID.randomUUID().toString();
+            DefaultWebSessionContext defaultWebSessionContext = new DefaultWebSessionContext();
+            defaultWebSessionContext.setServletRequest(request);
+            defaultWebSessionContext.setServletResponse(servletResponse);
+            defaultWebSessionContext.setSessionId(token);
+            super.createSession(defaultWebSessionContext);
         }
         //没看懂干嘛的留着吧
         request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE,
