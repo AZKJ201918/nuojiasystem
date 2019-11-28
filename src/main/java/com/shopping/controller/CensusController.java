@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.shopping.commons.constans.Constants;
 import com.shopping.commons.exception.SuperMarketException;
 import com.shopping.commons.resp.ApiResult;
+import com.shopping.entity.Discuss;
 import com.shopping.entity.VolumeAndMoney;
 import com.shopping.service.CensusService;
 import com.shopping.util.UrlUtils;
@@ -12,13 +13,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +35,8 @@ import java.util.Map;
 public class CensusController {
     @Autowired
     private CensusService censusService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
     @ApiOperation(value = "近七天销售各商品销售额和销量以及总销售额和销量",notes = "近七天销售各商品销售额和销量以及总销售额和销量",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("/census")
@@ -76,6 +80,29 @@ public class CensusController {
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看商品评论",notes = "商品评论",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/loadDiscuss")
+    public ApiResult loadDiscuss(@RequestParam(defaultValue = "1") Integer page,@RequestParam("5") Integer limit,Integer id){
+        ApiResult<Object> result = new ApiResult<>();
+        Query query = new Query();
+        if (id!=null){
+            query.addCriteria(Criteria.where("cid").is(id));
+        }
+        query.skip((page-1)*limit).limit(limit);
+        List<Discuss> discusses = null;
+        try {
+            discusses = mongoTemplate.find(query, Discuss.class);
+            System.out.println(discusses);
+            result.setMessage("查看评论成功");
+            result.setData(discusses);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
