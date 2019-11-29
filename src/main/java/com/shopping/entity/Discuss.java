@@ -23,4 +23,6 @@ public class Discuss {
     private String plusDetails;//追加评论
 
     private String orderId;
+
+    private Long count;//总数
 }

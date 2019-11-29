@@ -8,6 +8,7 @@ import com.shopping.config.shiro.WebSessionManager;
 import com.shopping.entity.User;
 import com.shopping.service.UserService;
 import com.shopping.util.MD5Util;
+import com.shopping.util.MD5Util1;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -160,7 +161,7 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         // 尝试登录
         try {
-            UsernamePasswordToken authenticationToken = new UsernamePasswordToken(user.getName(),user.getPassword());
+            UsernamePasswordToken authenticationToken = new UsernamePasswordToken(user.getName(), MD5Util1.getMD5(user.getPassword()));
             subject.login(authenticationToken);
             // 从request中获取token,完成响应
             map.put(WebSessionManager.TOKEN_NAME,
@@ -168,9 +169,11 @@ public class UserController {
             result.setMessage("登录成功");
             result.setData(map);
         } catch (UnknownAccountException e) {
+            e.printStackTrace();
             result.setMessage("用户不存在");
             result.setCode(Constants.RESP_STATUS_BADREQUEST);
         } catch (IncorrectCredentialsException e) {
+            e.printStackTrace();
             result.setMessage("密码不正确");
             result.setCode(Constants.RESP_STATUS_BADREQUEST);
         }

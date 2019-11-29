@@ -53,7 +53,7 @@ public class MyRealm extends AuthorizingRealm {
         String username = (String) token.getPrincipal();
         String password = new String((char[]) token.getCredentials());
         User user = userMapper.selectName(username);
-        password=MD5Util1.getMD5(password);
+        //password=MD5Util1.getMD5(password);
         //账号不存在
         if (user == null) {
             throw new UnknownAccountException();
@@ -70,6 +70,6 @@ public class MyRealm extends AuthorizingRealm {
         List<String> roles = new ArrayList<>();
         roles=userMapper.selectRoles(user);
         session.setAttribute("roles",roles);
-        return new SimpleAuthenticationInfo(user.getUid(), password, getName());
+        return new SimpleAuthenticationInfo(user.getUid(), user.getPassword(), getName());
     }
 }
