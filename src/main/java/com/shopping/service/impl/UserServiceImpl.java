@@ -30,12 +30,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void addUser(User user) {
-        userMapper.insertUser(user);
         String password = user.getPassword();
         if (password!=null){
             password= MD5Util1.getMD5(password);
             user.setPassword(password);
         }
+        userMapper.insertUser(user);
         if (user.getRid()!=null){
             userMapper.insertUser_role(user);
         }

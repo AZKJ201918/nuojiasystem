@@ -2,11 +2,13 @@ package com.shopping.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.shopping.commons.constans.Constants;
 import com.shopping.commons.exception.SuperMarketException;
 import com.shopping.commons.resp.ApiResult;
 import com.shopping.entity.Discuss;
 import com.shopping.entity.VolumeAndMoney;
+import com.shopping.entity.WxUser;
 import com.shopping.service.CensusService;
 import com.shopping.util.UrlUtils;
 import io.swagger.annotations.Api;
@@ -110,6 +112,42 @@ public class CensusController {
         } catch (Exception e) {
             e.printStackTrace();
             result.setMessage("服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "查看申请提现用户",notes = "查看申请提现用户,status=0,表示未提现；status=1，表示已提现",httpMethod = "POST")
+    @ApiImplicitParam
+    @PostMapping("/selectPlease")
+    public ApiResult selectPlease(Integer page,Integer limit,Integer status){
+        ApiResult<Object> result = new ApiResult<>();
+        try {
+            PageInfo<WxUser>pageInfo=censusService.findPlease(page,limit,status);
+            result.setMessage("查看用户提现成功");
+            result.setData(pageInfo);
+        } catch (SuperMarketException e) {
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            result.setCode(Constants.RESP_STATUS_BADREQUEST);
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
+            result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return result;
+    }
+    @ApiOperation(value = "提现",notes = "提现",httpMethod = "GET")
+    @ApiImplicitParam
+    @PostMapping("/tiCash")
+    public ApiResult tiCash(String uuid){
+        ApiResult<Object> result = null;
+        try {
+            result = new ApiResult<>();
+            censusService.modifyCash(uuid);
+            result.setMessage("提现成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("后台服务器异常");
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;

@@ -5,6 +5,7 @@ import com.shopping.entity.Orders;
 import com.shopping.entity.PrintOrder;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public interface OrdersMapper {
     List<Orders> selectOrders(Orders orders);
     @Select("select status from orders where orderid=#{orderid}")
     Integer selectOrderExsits(String orderid);
-    //@Update("update orders set status=3 where orderid=#{orderid}")
+    //@Update("update orders set status=3  where orderid=#{orderid}")
     int updateOrdersStatus(Orders orders);
     @Select("select cid,num from ordercommodity where orderid=#{orderid}")
     List<Map<String,Object>> selectOrderCommodity(String orderid);

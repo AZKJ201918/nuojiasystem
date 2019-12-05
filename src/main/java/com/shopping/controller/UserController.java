@@ -101,6 +101,11 @@ public class UserController {
                     return result;
                 }
             }
+            if (myRid==1&&user.getRid()!=1){
+                result.setMessage("不能修改系统管理员为其他角色");
+                result.setCode(Constants.RESP_STATUS_BADREQUEST);
+                return result;
+            }
             if (user.getName()!=null){
                 boolean flag=userService.findUserExsits1(user.getName(),user.getUid());
                 if (flag){
@@ -179,7 +184,7 @@ public class UserController {
         }
         return result;
     }
-    @ApiOperation(value = "查看当前用户用户的角色",notes = "查看角色",httpMethod = "POST")
+    @ApiOperation(value = "查看当前用户的角色",notes = "查看角色",httpMethod = "POST")
     @ApiImplicitParam
     @PostMapping("role")
     public ApiResult role(){
@@ -212,5 +217,21 @@ public class UserController {
             result.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
         }
         return result;
+    }
+    @ApiOperation(value = "退出",notes = "退出",httpMethod = "GET")
+    @ApiImplicitParam
+    @GetMapping("exit")
+    public ApiResult exit(){
+        ApiResult<Object> apiResult = new ApiResult<>();
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            subject.logout();
+            apiResult.setMessage("退出成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            apiResult.setMessage("退出失败");
+            apiResult.setCode(Constants.RESP_STATUS_INTERNAL_ERROR);
+        }
+        return apiResult;
     }
 }

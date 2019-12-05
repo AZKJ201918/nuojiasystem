@@ -1,3 +1,4 @@
+
 package com.shopping.service.impl;
 
 import com.github.pagehelper.PageHelper;
@@ -66,6 +67,9 @@ public class CommodityServiceImpl implements CommodityService {
             if (repertory==null){
                 Integer repertory1 = commodity.getRepertory();
                 String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                if (repertory1==null){
+                    repertory1=0;
+                }
                 Integer volumn=commodityMapper.selectVolumn(id,format);
                 if (volumn==null){
                     repertory=repertory1;
@@ -124,7 +128,8 @@ public class CommodityServiceImpl implements CommodityService {
                 retailMapper.insertSelective(retailTable);
             }
         }
-        /*WholeRetail wholeRetail = commodity.getWholeRetail();
+
+        WholeRetail wholeRetail = commodity.getWholeRetail();
         if (wholeRetail!=null){
             Integer wholeRetailId = wholeRetail.getId();
             if (wholeRetailId!=null){
@@ -132,7 +137,8 @@ public class CommodityServiceImpl implements CommodityService {
             }else {
                 wholeRetailMapper.insertSelective(wholeRetail);
             }
-        }*/
+        }
+
         List<DeatilBanner> deatilBannerList = commodity.getDeatilBannerList();
         if (deatilBannerList!=null){
             Integer deatilBannerId=null;
@@ -152,6 +158,9 @@ public class CommodityServiceImpl implements CommodityService {
                 Integer reper=commodityMapper.selectRepertory(id);
                 String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 Integer volumn=commodityMapper.selectVolumn(id,format);
+                if (reper==null){
+                    reper=0;
+                }
                 if (volumn==null){
                     repertory1=reper;
                 }else {
@@ -184,10 +193,12 @@ public class CommodityServiceImpl implements CommodityService {
         if (retailTable!=null){
             retailMapper.insertSelective(retailTable);
         }
-        /*WholeRetail wholeRetail = commodity.getWholeRetail();
+
+WholeRetail wholeRetail = commodity.getWholeRetail();
         if (wholeRetail!=null){
             wholeRetailMapper.insertSelective(wholeRetail);
-        }*/
+        }
+
         List<DeatilBanner> deatilBannerList = commodity.getDeatilBannerList();
         for (DeatilBanner deatilBanner:deatilBannerList){
             deatilBanner.setCid(commodity.getId());
@@ -214,3 +225,4 @@ public class CommodityServiceImpl implements CommodityService {
         hos.delete("repertory:"+id+"","repertory");
     }
 }
+

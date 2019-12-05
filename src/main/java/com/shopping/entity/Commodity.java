@@ -57,4 +57,5 @@ public class Commodity {
 
     private Double postage;
 
+    private Integer buy;//限购次数
 }

@@ -10,9 +10,11 @@ import com.shopping.entity.PrintOrder;
 import com.shopping.mapper.AddressMapper;
 import com.shopping.mapper.OrdersMapper;
 import com.shopping.service.OrderService;
+import com.shopping.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +61,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void modifyOrders(Orders orders) throws SuperMarketException {
+    public void modifyOrders(Orders orders) throws SuperMarketException, ParseException {
          Integer status=ordersMapper.selectOrderExsits(orders.getOrderid());
          if (status!=2){
              throw new SuperMarketException("不能修改未付款的订单为已发货");
          }
          orders.setSendtime(new Date());
+         orders.setSendouttime(DateUtil.plusDay2(15));
          ordersMapper.updateOrdersStatus(orders);
     }
 

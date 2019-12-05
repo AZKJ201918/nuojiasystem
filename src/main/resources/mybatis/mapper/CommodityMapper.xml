@@ -19,10 +19,11 @@
     <result column="retail" property="retail" jdbcType="INTEGER" />
     <result column="isintegral" property="isintegral" jdbcType="INTEGER" />
     <result column="beretail" property="beretail" jdbcType="INTEGER" />
+    <result column="buy" property="buy" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, url, price, sales, repertory, createTime, updateTime, status, type, detailurl, 
-    specsurl, saleurl, subname, retail, isintegral, postage, beretail
+    specsurl, saleurl, subname, retail, isintegral, postage, beretail,buy
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -30,6 +31,8 @@
     from commodity
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+
   <select id="selectCommodity" resultMap="BaseResultMap"  parameterType="java.lang.String">
     select
     <include refid="Base_Column_List" />
@@ -40,6 +43,8 @@
       </if>
     </where>
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from commodity
     where id = #{id,jdbcType=INTEGER}
@@ -49,13 +54,13 @@
       price, sales, repertory, 
       createTime, updateTime, status, 
       type, detailurl, specsurl, 
-      saleurl, subname, retail, 
+      saleurl, subname, retail,buy,
       isintegral, beretail)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
       #{price,jdbcType=DECIMAL}, #{sales,jdbcType=INTEGER}, #{repertory,jdbcType=INTEGER}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{detailurl,jdbcType=VARCHAR}, #{specsurl,jdbcType=VARCHAR}, 
-      #{saleurl,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, #{retail,jdbcType=INTEGER}, 
+      #{saleurl,jdbcType=VARCHAR}, #{subname,jdbcType=VARCHAR}, #{retail,jdbcType=INTEGER},#{buy,jdbcType=INTEGER},
       #{isintegral,jdbcType=INTEGER}, #{beretail,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.shopping.entity.Commodity" useGeneratedKeys="true" keyProperty="id">
@@ -105,6 +110,9 @@
       </if>
       <if test="retail != null" >
         retail,
+      </if>
+      <if test="buy != null" >
+        buy,
       </if>
       <if test="isintegral != null" >
         isintegral,
@@ -162,6 +170,9 @@
       <if test="retail != null" >
         #{retail,jdbcType=INTEGER},
       </if>
+      <if test="buy != null" >
+        #{buy,jdbcType=INTEGER},
+      </if>
       <if test="isintegral != null" >
         #{isintegral,jdbcType=INTEGER},
       </if>
@@ -218,6 +229,9 @@
       <if test="retail != null" >
         retail = #{retail,jdbcType=INTEGER},
       </if>
+      <if test="buy != null" >
+        buy = #{buy,jdbcType=INTEGER},
+      </if>
       <if test="isintegral != null" >
         isintegral = #{isintegral,jdbcType=INTEGER},
       </if>
@@ -246,6 +260,7 @@
       saleurl = #{saleurl,jdbcType=VARCHAR},
       subname = #{subname,jdbcType=VARCHAR},
       retail = #{retail,jdbcType=INTEGER},
+      buy = #{buy,jdbcType=INTEGER},
       isintegral = #{isintegral,jdbcType=INTEGER},
       beretail = #{beretail,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}

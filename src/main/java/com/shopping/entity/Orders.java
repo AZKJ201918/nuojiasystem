@@ -48,4 +48,6 @@ public class Orders {
     private Date starttime;
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GTM+8")
     private Date endtime;
+    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GTM+8")
+    private Date sendouttime;
 }

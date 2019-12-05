@@ -1,3 +1,4 @@
+
 package com.shopping.service;
 
 import com.github.pagehelper.PageInfo;
@@ -13,3 +14,4 @@ public interface CommodityService {
 
     void removeCommodityAttribute(Integer id);
 }
+
